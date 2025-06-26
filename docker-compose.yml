@@ -1,0 +1,51 @@
+services:
+  musicservice.api:
+    image: ${DOCKER_REGISTRY-}musicserviceapi
+    container_name: musicservice.api
+    networks:
+        - main
+    ports:
+        - "${MUSICSERVICE_EXT_HTTP_PORT:-6000}:${MUSICSERVICE_INT_HTTP_PORT:-8080}"
+    build:
+      context: .
+      dockerfile: MusicService.Api/Dockerfile
+    depends_on:
+    - musicservice.database
+
+  musicservice.database:
+    image: postgres
+    container_name: kartoshka.db
+    ports:
+        - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
+    volumes:
+        - db:/kartoshka/db
+    networks:
+        - main
+    environment:
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_DB: ${POSTGRES_DB}
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+        PGADMIN_DEFAULT_EMAIL: example@example.com
+        PGADMIN_DEFAULT_PASSWORD: example
+        PGADMIN_LISTEN_PORT: 80
+    ports:
+    - "15432:80"
+    volumes:
+    - pgAdmin:/kartoshka/pgadmin
+    networks:
+    - main
+    depends_on:
+    - musicservice.database
+
+
+networks:
+  main: 
+    driver: bridge
+
+volumes:
+  db:
+  pgAdmin:
