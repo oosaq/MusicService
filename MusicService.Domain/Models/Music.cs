@@ -8,5 +8,10 @@
         public string MusicPath { get; set; }
 
         public List<MusicGenre> Genres { get; set; }
+        public List<Playlist> Playlists { get; set; }
+
+        public Guid? AlbumId { get; set; }
+        public Album? Album { get; set; }
+
     }
 }

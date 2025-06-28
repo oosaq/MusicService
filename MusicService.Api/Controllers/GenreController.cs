@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicService.Api.Extensions;
 using MusicService.Application.Features.Commands.Genre.Add;
@@ -7,6 +8,7 @@ namespace MusicService.Api.Controllers
 {
     [ApiController]
     [Route("/api/[controller]")]
+    [Authorize]
     public class GenreController(
         IMediator mediator) : ControllerBase
     {

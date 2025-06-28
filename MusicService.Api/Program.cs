@@ -12,6 +12,9 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 
 services
+    .AddHttpContextAccessor();
+
+services
     .AddApplicationLayer()
     .AddDataAccess(configuration)
     .AddJwtProvider();

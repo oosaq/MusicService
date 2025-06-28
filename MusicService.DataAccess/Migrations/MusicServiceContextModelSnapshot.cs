@@ -34,13 +34,50 @@ namespace MusicService.Database.Migrations
 
                     b.HasIndex("MusicsId");
 
-                    b.ToTable("GenreMusic", "MusicSerivce");
+                    b.ToTable("GenreMusic", "MusicService");
+                });
+
+            modelBuilder.Entity("MusicPlaylist", b =>
+                {
+                    b.Property<Guid>("MusicsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PlaylistsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("MusicsId", "PlaylistsId");
+
+                    b.HasIndex("PlaylistsId");
+
+                    b.ToTable("MusicPlaylist", "MusicService");
+                });
+
+            modelBuilder.Entity("MusicService.Domain.Models.Album", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id")
+                        .HasName("Album_pkey");
+
+                    b.ToTable("Album", "MusicService");
                 });
 
             modelBuilder.Entity("MusicService.Domain.Models.Music", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("AlbumId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
@@ -58,7 +95,9 @@ namespace MusicService.Database.Migrations
                     b.HasKey("Id")
                         .HasName("Music_pkey");
 
-                    b.ToTable("Music", "MusicSerivce");
+                    b.HasIndex("AlbumId");
+
+                    b.ToTable("Music", "MusicService");
                 });
 
             modelBuilder.Entity("MusicService.Domain.Models.MusicGenre", b =>
@@ -74,7 +113,32 @@ namespace MusicService.Database.Migrations
                     b.HasKey("Id")
                         .HasName("MusicGenre_pkey");
 
-                    b.ToTable("MusicGenre", "MusicSerivce");
+                    b.ToTable("Genre", "MusicService");
+                });
+
+            modelBuilder.Entity("MusicService.Domain.Models.Playlist", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id")
+                        .HasName("Playlist_pkey");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("Playlist", "MusicService");
                 });
 
             modelBuilder.Entity("MusicService.Domain.Models.User", b =>
@@ -98,7 +162,7 @@ namespace MusicService.Database.Migrations
                     b.HasKey("Id")
                         .HasName("User_pkey");
 
-                    b.ToTable("User", "MusicSerivce");
+                    b.ToTable("User", "MusicService");
                 });
 
             modelBuilder.Entity("GenreMusic", b =>
@@ -114,6 +178,51 @@ namespace MusicService.Database.Migrations
                         .HasForeignKey("MusicsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MusicPlaylist", b =>
+                {
+                    b.HasOne("MusicService.Domain.Models.Music", null)
+                        .WithMany()
+                        .HasForeignKey("MusicsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicService.Domain.Models.Playlist", null)
+                        .WithMany()
+                        .HasForeignKey("PlaylistsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MusicService.Domain.Models.Music", b =>
+                {
+                    b.HasOne("MusicService.Domain.Models.Album", "Album")
+                        .WithMany("Tracks")
+                        .HasForeignKey("AlbumId");
+
+                    b.Navigation("Album");
+                });
+
+            modelBuilder.Entity("MusicService.Domain.Models.Playlist", b =>
+                {
+                    b.HasOne("MusicService.Domain.Models.User", "Creator")
+                        .WithMany("Playlists")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("MusicService.Domain.Models.Album", b =>
+                {
+                    b.Navigation("Tracks");
+                });
+
+            modelBuilder.Entity("MusicService.Domain.Models.User", b =>
+                {
+                    b.Navigation("Playlists");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,6 +11,11 @@ namespace MusicService.Database.EntityTypeConfigurations
             builder.HasKey(m => m.Id).HasName("Music_pkey");
 
             builder.ToTable(tableName, scheme);
+
+            builder
+                .HasOne(m => m.Album)
+                .WithMany(a => a.Tracks)
+                .HasForeignKey(m => m.AlbumId);
         }
     }
 }

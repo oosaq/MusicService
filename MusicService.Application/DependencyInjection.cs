@@ -14,7 +14,8 @@ namespace KartoshkaEvent.Application
 
             services
                 .AddScoped<ICookieService, CookieService>()
-                .AddScoped<IMusicService, MusicService.Application.Services.MusicService>();
+                .AddScoped<IMusicService, MusicService.Application.Services.MusicService>()
+                .AddScoped<CurrentUserService>();
 
             return services;
         }

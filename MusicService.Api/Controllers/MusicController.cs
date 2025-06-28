@@ -5,7 +5,7 @@ using MusicService.Api.Extensions;
 using MusicService.Application.Features.Commands.Musics.AddMusic;
 using MusicService.Application.Features.Commands.Musics.Delete;
 using MusicService.Application.Features.Commands.Musics.Edit;
-using MusicService.Application.Features.Queries.GetAll;
+using MusicService.Application.Features.Queries.Musics.GetAllMusic;
 
 namespace MusicService.Api.Controllers
 {
